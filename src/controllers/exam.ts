@@ -43,7 +43,7 @@ export const getExamById = (req: Request, res: Response) => {
       examTime: exam.examTime,
       doingExamTime: exam.doingExamTime,
       module: exam.moduleId,
-      class: exam.classId.map((c) => c.name),
+      class: exam.classId.map((c) => ({_id: c._id ,name: c.name})),
       examQuestions: exam.examQuestions.map((examQuestion) => ({_id: examQuestion._id, content: examQuestion.content})),
     });
   });
