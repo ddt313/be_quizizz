@@ -38,7 +38,20 @@ const examSchema = new Schema({
     type: mongoose.Types.ObjectId,
     ref: Module,
     require: true,
-  }
+  },
+  finished: [
+    {
+      studentId: {
+        type: mongoose.Types.ObjectId,
+        ref: User,
+        require: false,
+      },
+      score: {
+        type: Number,
+        require: false,
+      },
+    }
+  ],
 });
 
 const Exam = mongoose.model('Exam', examSchema);

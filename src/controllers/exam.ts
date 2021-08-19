@@ -33,6 +33,7 @@ export const getExamById = (req: Request, res: Response) => {
     .populate({path: "examQuestions"})
     .populate({path: "moduleId"})
     .populate({path: "classId"})
+    .populate({path: "finished.studentId", select: "name studentId _id"})
     .then((exam: any) => {
     res.json({
       _id: exam._id,
@@ -42,6 +43,7 @@ export const getExamById = (req: Request, res: Response) => {
       module: exam.moduleId,
       class: exam.classId.map((c) => ({_id: c._id ,name: c.name})),
       examQuestions: exam.examQuestions.map((examQuestion) => ({_id: examQuestion._id, content: examQuestion.content})),
+      finished: exam.finished,
     });
   });
 };
@@ -62,7 +64,7 @@ export const createExam = (req:Request, res: Response) => {
   const {name, examTime, doingExamTime, lecturerId, classId, examQuestions, moduleId} = req.body;
 
   const exam = new Exam({
-    name, examTime, doingExamTime, lecturerId, classId, examQuestions, moduleId,
+    name, examTime, doingExamTime, lecturerId, classId, examQuestions, moduleId, finished: [],
   });
 
   exam.save().then((result) => {

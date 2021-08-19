@@ -1,5 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 import Module from './module';
+import Scholastic from './scholastic';
 import User from './user';
 
 const classSchema = new Schema({
@@ -11,6 +12,11 @@ const classSchema = new Schema({
     type: mongoose.Types.ObjectId,
     ref: Module,
     require: true,
+  },
+  scholasticId: {
+    type: mongoose.Types.ObjectId,
+    ref: Scholastic,
+    require: false,
   },
   students: [
     {

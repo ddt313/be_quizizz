@@ -17,14 +17,35 @@ export const getClasses = (req: Request, res: Response) => {
 
   Class.find({lecturer: lectureId})
     .populate("moduleId")
+    .populate("scholasticId")
     .then((docs) => {
       res.json(docs.map((result: any) => ({
         _id: result._id,
         name: result.name,
         module: result.moduleId.name,
         numberOfStudents: result.students.length,
+        scholastic: result.scholasticId.name,
       }))
     )});
+};
+
+export const getClassById = (req: Request, res: Response) => {
+  const {id} = req.params;
+
+  Class.findById(id)
+    .populate("moduleId")
+    .populate("scholasticId")
+    .populate({path: "students", select: "studentId name"})
+    .then((result: any) => {
+      // res.json(result);
+      res.json({
+        _id: result._id,
+        name: result.name,
+        module: result.moduleId,
+        scholastic: result.scholasticId,
+        students: result.students,
+      })
+    })
 };
 
 export const createClass = (req: Request, res: Response) => {

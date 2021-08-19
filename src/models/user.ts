@@ -17,7 +17,11 @@ const userSchema = new Schema({
   role: {
     type: String,
     require: true,
-  }
+  },
+  studentId: {
+    type: String,
+    require: false,
+  },
 });
 
 const User = mongoose.model<IUser>('User', userSchema);
