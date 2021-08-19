@@ -9,6 +9,8 @@ import examQuestionRouter from './routes/examQuestion';
 import examRouter from './routes/exam';
 import classRouter from './routes/class';
 import studentRouter from './routes/student';
+import authRouter from './routes/auth';
+import chapterRouter from './routes/chapter';
 
 import User from './models/user';
 import Module from './models/module';
@@ -23,6 +25,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(cors({origin: '*'}));
 
+app.use('/auth', authRouter);
 app.use('/questions', questionRouter);
 app.use('/exam-questions', examQuestionRouter);
 app.use('/modules', (req, res, next) => {
@@ -35,17 +38,7 @@ app.use('/modules', (req, res, next) => {
     });
   });
 });
-app.use('/chapters/:id', (req, res, next) => {
-  const id = req.params.id;
-  Chapter.find({moduleId: id}).then((data) => {
-    res.json({
-      statusCode: 200,
-      payload: {
-        chapters: data,
-      },
-    });
-  });
-});
+app.use('/chapters', chapterRouter);
 
 app.use('/exams', examRouter);
 app.use('/classes', classRouter);

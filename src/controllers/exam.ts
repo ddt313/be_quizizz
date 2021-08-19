@@ -6,7 +6,6 @@ export const getExamsName = (req: Request, res: Response) => {
   Exam.find()
     .populate({path: "examQuestions"})
     .then((exams: any) => {
-    console.log('exams:', exams);
     // res.json(exams);
     res.json(exams.map((exam) => ({_id: exam._id, name: exam.name})))
   });
@@ -17,7 +16,6 @@ export const getExams = (req: Request, res: Response) => {
     .populate({path: "examQuestions"})
     .populate({path: "moduleId"})
     .then((exams: any) => {
-    console.log('exams:', exams);
     res.json(exams.map((exam) => ({
       _id: exam._id,
       name: exam.name,
@@ -36,7 +34,6 @@ export const getExamById = (req: Request, res: Response) => {
     .populate({path: "moduleId"})
     .populate({path: "classId"})
     .then((exam: any) => {
-    console.log('exam details:', exam);
     res.json({
       _id: exam._id,
       name: exam.name,
@@ -48,3 +45,33 @@ export const getExamById = (req: Request, res: Response) => {
     });
   });
 };
+
+export const updateExam = (req:Request, res: Response) => {
+  const {id} = req.params;
+
+  const {name, moduleId, examQuestions, lecturerId, doingExamTime, examTime, classId} = req.body;
+
+  const dataUpdateExam = {
+    name, moduleId, examQuestions, lecturerId, doingExamTime, examTime, classId,
+  };
+
+  Exam.findByIdAndUpdate(id, dataUpdateExam).then((vaule) => res.json(vaule));
+}
+
+export const createExam = (req:Request, res: Response) => {
+  const {name, examTime, doingExamTime, lecturerId, classId, examQuestions, moduleId} = req.body;
+
+  const exam = new Exam({
+    name, examTime, doingExamTime, lecturerId, classId, examQuestions, moduleId,
+  });
+
+  exam.save().then((result) => {
+    res.json(result);
+  })
+}
+
+export const deleteExam = (req:Request, res: Response) => {
+  Exam.findByIdAndDelete(req.params.id).then((data) => {
+    res.json(data);
+  });
+}

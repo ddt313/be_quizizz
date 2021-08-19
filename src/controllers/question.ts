@@ -23,6 +23,7 @@ export const getQuestions = (req: Request, res: Response, next: NextFunction) =>
             level: question.level,
             user: question.userId.name,
             module: question.chapterId.moduleId.name,
+            chapter: question.chapterId.name,
           })),
           pageTotal: Math.ceil(docs.length / (+limit)),
           limit: +limit,

@@ -42,11 +42,10 @@ export const getExamQuestionById = (req: Request, res: Response) => {
       populate: {path: 'chapterId'},
     })
     .then((examQuestion: any) => {
-      Exam.find().populate({
+      Exam.find({examQuestions: id}).populate({
         path: 'examQuestions',
-        math: { _id: id },
+        // math: { _id: id },
       }).then((exam: any) => {
-        console.log('exam', exam);
         res.json({
           _id: examQuestion._id,
           content: examQuestion.content,
@@ -78,7 +77,11 @@ export const createExamQuestion = (req: Request, res: Response) => {
     questions: req.body.questions,
   });
 
+  console.log('create exam question', req.body);
+  const {examId} = req.body;
+
   examQuestion.save().then((result) => {
+    addExamQuestionToExam(examId, result._id);
     res.json(result);
   });
 };
@@ -97,3 +100,18 @@ export const updateExamQuestion = (req: Request, res: Response) => {
   ExamQuestion.findByIdAndUpdate(id, dataUpdate)
     .then((value) => res.json(value));
 };
+
+const addExamQuestionToExam = (examId: string, examQuestionId: string) => {
+  Exam.findOneAndUpdate({_id: examId, examQuestions: {$ne: examQuestionId}}, { $push: {examQuestions: new mongoose.Types.ObjectId(examQuestionId)}})
+  .then((data) => {
+    // console.log('data add',data);
+  });
+};
+
+export const deleteExamQuestion = (req: Request, res: Response) => {
+  const {id} = req.params;
+
+  ExamQuestion.findByIdAndDelete(id).then((data) => {
+    res.json(data);
+  });
+}

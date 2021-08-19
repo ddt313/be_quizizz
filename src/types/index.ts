@@ -29,6 +29,7 @@ export interface IUser {
   name: string,
   emal: string,
   password: string,
+  role: string,
 }
 
 export interface IExamQuestion {
