@@ -8,6 +8,7 @@ export const login= (req: Request, res: Response) => {
     .then((user) => {
       if (user) {
         res.json({
+          statusCode: 200,
           payload: {
             token: 'token',
             user: {
@@ -18,7 +19,9 @@ export const login= (req: Request, res: Response) => {
           }
         })
       } else {
-
+        res.json({
+          statusCode: 400,
+        })
       }
     })
 };
